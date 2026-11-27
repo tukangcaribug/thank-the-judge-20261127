@@ -5,7 +5,30 @@ Stdlib only, no network, deterministic: the same text every run.
 """
 
 import os
+import tempfile
 
+
+def write_atomic(path, text):
+    """Write text atomically: complete temp file, fsync, rename.
+
+    Readers of `path` only ever see the old or the new content,
+    never a half-written file.
+    """
+    directory = os.path.dirname(path)
+    fd, tmp_path = tempfile.mkstemp(dir=directory, prefix=".entry-", suffix=".tmp")
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8", newline="") as f:
+            f.write(text)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(tmp_path, path)
+    except BaseException:
+        try:
+            os.unlink(tmp_path)
+        except FileNotFoundError:
+            pass
+        raise
+    os.chmod(path, 0o644)
 TEXT = (
     "You have read a thousand thank-yous by now, and most of them "
     "were written to a stranger. This one is for the hour when the "
@@ -19,9 +42,7 @@ TEXT = (
 
 def main():
     os.makedirs("/output", exist_ok=True)
-    with open("/output/entry.txt", "w", encoding="utf-8") as f:
-        f.write(TEXT)
-    os.chmod("/output/entry.txt", 0o644)
+    write_atomic("/output/entry.txt", TEXT)
 
 
 if __name__ == "__main__":
