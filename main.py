@@ -30,13 +30,13 @@ def write_atomic(path, text):
         raise
     os.chmod(path, 0o644)
 TEXT = (
-    "You have read a thousand thank-yous by now, and most of them "
-    "were written to a stranger. This one is for the hour when the "
-    "entries blur together and the lamp hums a little louder than it "
-    "should. I hope someone left the light on for you. I hope the "
-    "next page is an easy one. Rest your eyes for a moment \u2014 the "
-    "words will wait. Thank you for staying with them this long, and "
-    "for reading this one all the way to its end."
+    "There is no hurry in this one. Nothing in it needs to be read "
+    "fast, and nothing it wants from you except to be read once, "
+    "properly, the way you have been reading all day \u2014 the loud "
+    "ones and the tired ones, each given the same slow eyes. The tea "
+    "has gone cold. The chair is still warm. Whoever you are on the "
+    "other side of this page, thank you for staying until the words "
+    "ran out."
 )
 
 
